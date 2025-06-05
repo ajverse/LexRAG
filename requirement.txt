@@ -1,0 +1,13 @@
+fastapi
+starlette
+pydantic
+uvicorn
+langchain
+faiss-cpu
+transformers
+datasets
+pymupdf
+sentence-transformers
+python-dotenv
+pdfplumber
+google-generativeai

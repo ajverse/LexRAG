@@ -2,18 +2,143 @@
 <html>
 <head>
   <title>Legal RAG Chatbot</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
   <style>
-    body { font-family: Arial, sans-serif; padding: 20px; max-width: 700px; margin: auto; }
-    textarea { width: 100%; height: 120px; }
-    button { padding: 10px 20px; margin-top: 10px; }
-    #chat_box p { background: #eee; padding: 10px; border-radius: 5px; margin-top: 5px; }
+    body {
+      font-family: 'Orbitron', Arial, sans-serif;
+      background: linear-gradient(135deg, #0f2027, #2c5364 80%);
+      color: #e0e0e0;
+      padding: 0;
+      margin: 0;
+      min-height: 100vh;
+    }
+    .container {
+      max-width: 700px;
+      margin: 40px auto;
+      background: rgba(20, 30, 50, 0.95);
+      border-radius: 18px;
+      box-shadow: 0 0 32px #00ffe7a0, 0 0 0 2px #00ffe7;
+      padding: 32px 28px 18px 28px;
+      position: relative;
+      overflow: hidden;
+    }
+    .main-title {
+      text-shadow: 0 0 8px #00ffe7, 0 0 24px #00ffe7, 0 0 2px #fff;
+      color: #00ffe7;
+      font-family: 'Orbitron', Arial, sans-serif;
+      letter-spacing: 2px;
+      font-size: 2em;
+      margin-bottom: 0.2em;
+    }
+    .desc {
+      font-size: 1.1em;
+      margin-bottom: 18px;
+      color: #b0eaff;
+      background: rgba(0, 255, 231, 0.07);
+      border-left: 4px solid #00ffe7;
+      padding: 10px 18px;
+      border-radius: 8px;
+    }
+    textarea {
+      width: 100%;
+      height: 100px;
+      background: #1a2636;
+      color: #00ffe7;
+      border: 2px solid #00ffe7;
+      border-radius: 8px;
+      font-size: 1.1em;
+      padding: 12px;
+      margin-bottom: 10px;
+      resize: vertical;
+      box-shadow: 0 0 8px #00ffe7a0 inset;
+      transition: border 0.2s;
+    }
+    textarea:focus {
+      outline: none;
+      border: 2px solid #fff;
+    }
+    button {
+      background: linear-gradient(90deg, #00ffe7 0%, #007cf0 100%);
+      color: #0f2027;
+      border: none;
+      border-radius: 8px;
+      padding: 12px 32px;
+      font-size: 1.1em;
+      font-family: 'Orbitron', Arial, sans-serif;
+      font-weight: bold;
+      cursor: pointer;
+      box-shadow: 0 0 16px #00ffe7a0;
+      transition: background 0.2s, color 0.2s;
+      margin-bottom: 18px;
+    }
+    button:hover {
+      background: linear-gradient(90deg, #007cf0 0%, #00ffe7 100%);
+      color: #fff;
+    }
+    #chat_box {
+      min-height: 180px;
+      max-height: 350px;
+      overflow-y: auto;
+      background: rgba(10, 20, 40, 0.7);
+      border-radius: 10px;
+      box-shadow: 0 0 12px #00ffe7a0 inset;
+      padding: 16px;
+      margin-bottom: 18px;
+      border: 1.5px solid #00ffe7;
+    }
+    #chat_box p {
+      background: linear-gradient(90deg, #1a2636 60%, #00ffe720 100%);
+      color: #fff;
+      padding: 12px 16px;
+      border-radius: 8px;
+      margin-top: 8px;
+      margin-bottom: 8px;
+      box-shadow: 0 0 8px #00ffe7a0;
+      font-family: 'Fira Mono', 'Consolas', monospace;
+      font-size: 1.05em;
+      animation: fadeIn 0.5s;
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    .profile-links {
+      display: flex;
+      gap: 18px;
+      align-items: center;
+      margin-top: 18px;
+      margin-bottom: 0;
+      justify-content: flex-end;
+    }
+    .profile-links a {
+      color: #00ffe7;
+      font-size: 2em;
+      transition: color 0.2s, transform 0.2s;
+      text-decoration: none;
+    }
+    .profile-links a:hover {
+      color: #fff;
+      transform: scale(1.15);
+    }
+    @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@700&family=Fira+Mono&display=swap');
   </style>
 </head>
 <body>
-  <h2>⚖️ Legal RAG Chatbot</h2>
-  <textarea id="question" placeholder="Ask a question about the laws..."></textarea>
-  <button onclick="ask()">Ask</button>
-  <div id="chat_box"></div>
+  <div class="container">
+    <h2 class="main-title">LexRAG: Legal Chatbot</h2>
+    <div class="desc">
+      <b>LexRAG</b> is a Retrieval-Augmented Generation (RAG) chatbot designed to help you explore, summarize, and understand legal documents with AI-powered insights. Upload or query legal texts and get instant, context-aware answers—speeding up your legal research and decision-making.<br>
+      <span style="color:#00ffe7;">Powered by Google Gemini 1.5 Flash and advanced vector search.</span>
+    </div>
+    <textarea id="question" placeholder="Ask a question about the laws, verdicts, or legal cases..."></textarea>
+    <button onclick="ask()"><i class="fas fa-robot"></i> Ask</button>
+    <div id="chat_box"></div>
+    <div class="profile-links">
+      <a href="https://www.linkedin.com/in/ashutosh-jena-67a3b91ba/" target="_blank" title="LinkedIn"><i class="fab fa-linkedin"></i></a>
+      <a href="https://github.com/ajverse" target="_blank" title="GitHub"><i class="fab fa-github"></i></a>
+    </div>
+  </div>
   <script src="/static/script.js"></script>
 </body>
 </html>

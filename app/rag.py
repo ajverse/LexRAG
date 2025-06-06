@@ -1,20 +1,24 @@
 import os
-from datasets import load_dataset
 from io import BytesIO
 import fitz
+import warnings
+import google.generativeai as genai
+from datasets import load_dataset
 from langchain_core.documents import Document
 from langchain.text_splitter import CharacterTextSplitter
 from langchain_community.vectorstores import FAISS
-from langchain_community.embeddings import HuggingFaceEmbeddings
+from langchain_huggingface import HuggingFaceEmbeddings
 from dotenv import load_dotenv
-import warnings
-import google.generativeai as genai
 
 load_dotenv()
 
 DATASET_ID = os.getenv("HF_DATASET_ID", "ajverse/law-docs")
 
+# Use the Hugging Face token if available for public dataset access
+HUB_TOKEN = os.getenv("HUGGINGFACEHUB_API_TOKEN", None)
+
 def fetch_pdf_docs_from_hf(dataset_id=DATASET_ID) -> list[Document]:
+    # Use the recommended Hugging Face datasets loading pattern
     dataset = load_dataset(dataset_id, split="train")
     documents = []
 
@@ -75,6 +79,13 @@ def get_rag_chain():
         def run(self, question):
             docs = self.retriever.invoke(question)
             context = "\n".join([d.page_content for d in docs])
-            prompt = f"Context:\n{context}\n\nQuestion: {question}\nAnswer:"
+            prompt = (
+                "You are LexRAG, an expert legal assistant AI. "
+                "Given the following context from legal documents, answer the user's question as clearly, concisely, and helpfully as possible. "
+                "If the answer is not present in the context, say 'I could not find a direct answer in the provided documents.'\n"
+                "\nContext:\n" + context +
+                "\n\nUser Question: " + question +
+                "\n\nAnswer (be clear, cite relevant context if possible):"
+            )
             return get_gemini_answer(prompt)
     return GeminiRAG(retriever)

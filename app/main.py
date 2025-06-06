@@ -3,13 +3,14 @@ os.environ['TF_ENABLE_ONEDNN_OPTS'] = '0'
 import tensorflow as tf
 os.environ['TF_CPP_MIN_LOG_LEVEL'] = '2'
 import uuid
-from fastapi import FastAPI, Request
+from fastapi import FastAPI, Request, UploadFile, File
 from starlette.middleware.sessions import SessionMiddleware
 from fastapi.responses import FileResponse
 from fastapi.staticfiles import StaticFiles
 from pydantic import BaseModel
 from dotenv import load_dotenv
 from app.rag import get_rag_chain
+from typing import List
 
 load_dotenv()
 
@@ -31,6 +32,8 @@ app.mount("/static", StaticFiles(directory="frontend"), name="static")
 chat_chain = get_rag_chain()
 user_sessions = {}
 
+uploaded_files = []  # Store uploaded PDFs in memory for demo (use persistent storage in production)
+
 class Query(BaseModel):
     question: str
 
@@ -47,6 +50,13 @@ async def chat(request: Request, query: Query):
 
     answer = chat_chain.run(query.question)
     return {"answer": answer}
+
+@app.post("/upload")
+async def upload_pdfs(pdfs: List[UploadFile] = File(...)):
+    for pdf in pdfs:
+        content = await pdf.read()
+        uploaded_files.append({"filename": pdf.filename, "content": content})
+    return {"message": f"Uploaded {len(pdfs)} PDF file(s) successfully!"}
 
 @app.get("/")
 async def root():

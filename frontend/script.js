@@ -52,3 +52,61 @@ async function ask() {
     chatBox.scrollTop = chatBox.scrollHeight;
   }
 }
+
+// Drag & drop and browse file upload logic
+const fileUploadArea = document.getElementById('file-upload-area');
+const fileInput = document.getElementById('file-input');
+
+fileUploadArea.addEventListener('dragover', (e) => {
+  e.preventDefault();
+  fileUploadArea.classList.add('dragover');
+});
+fileUploadArea.addEventListener('dragleave', (e) => {
+  e.preventDefault();
+  fileUploadArea.classList.remove('dragover');
+});
+fileUploadArea.addEventListener('drop', (e) => {
+  e.preventDefault();
+  fileUploadArea.classList.remove('dragover');
+  if (e.dataTransfer.files.length) {
+    handleFiles(e.dataTransfer.files);
+  }
+});
+fileInput.addEventListener('change', (e) => {
+  if (e.target.files.length) {
+    handleFiles(e.target.files);
+  }
+});
+
+function handleFiles(files) {
+  // Only accept PDFs
+  const pdfs = Array.from(files).filter(f => f.type === 'application/pdf');
+  if (pdfs.length === 0) {
+    alert('Please upload PDF files only.');
+    return;
+  }
+  // Show uploading message
+  const chatBox = document.getElementById('chat_box');
+  const uploadingMsg = document.createElement('p');
+  uploadingMsg.textContent = `Uploading ${pdfs.length} PDF file(s)...`;
+  uploadingMsg.style.color = '#00b4d8';
+  chatBox.appendChild(uploadingMsg);
+  chatBox.scrollTop = chatBox.scrollHeight;
+
+  // Prepare FormData and send to backend
+  const formData = new FormData();
+  pdfs.forEach((file, idx) => formData.append('pdfs', file));
+  fetch('/upload', {
+    method: 'POST',
+    body: formData
+  })
+    .then(res => res.json())
+    .then(data => {
+      uploadingMsg.textContent = data.message || 'Upload complete.';
+      uploadingMsg.style.color = '#00b4d8';
+    })
+    .catch(() => {
+      uploadingMsg.textContent = 'Upload failed.';
+      uploadingMsg.style.color = '#ff4a4a';
+    });
+}

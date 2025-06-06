@@ -119,6 +119,40 @@
       color: #222;
       transform: scale(1.15);
     }
+    .footer-bar {
+      position: fixed;
+      left: 0;
+      bottom: 0;
+      width: 100vw;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      background: rgba(255,255,255,0.85);
+      padding: 8px 18px;
+      z-index: 100;
+      box-shadow: 0 -2px 12px #b2f0ff30;
+    }
+    .footer-bar .flag {
+      height: 28px;
+      width: 42px;
+      margin-right: 10px;
+    }
+    .footer-bar .footer-text {
+      color: #00b4d8;
+      font-family: 'Orbitron', Arial, sans-serif;
+      font-size: 1em;
+      font-weight: bold;
+    }
+    @media (max-width: 600px) {
+      .footer-bar {
+        font-size: 0.9em;
+        padding: 6px 8px;
+      }
+      .footer-bar .flag {
+        height: 20px;
+        width: 30px;
+      }
+    }
     @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@700&family=Fira+Mono&display=swap');
   </style>
 </head>
@@ -136,9 +170,10 @@
       <a href="https://www.linkedin.com/in/ashutosh-jena-67a3b91ba/" target="_blank" title="LinkedIn"><i class="fab fa-linkedin"></i></a>
       <a href="https://github.com/ajverse" target="_blank" title="GitHub"><i class="fab fa-github"></i></a>
     </div>
-    <div style="text-align:right; color:#00b4d8; font-family:'Orbitron',Arial,sans-serif; font-size:1em; margin-top:6px;">
-      Developed by Ashutosh Jena
-    </div>
+  </div>
+  <div class="footer-bar">
+    <img class="flag" src="https://upload.wikimedia.org/wikipedia/en/4/41/Flag_of_India.svg" alt="Indian Flag" />
+    <span class="footer-text">Developed by Ashutosh Jena</span>
   </div>
   <script src="/static/script.js"></script>
 </body>

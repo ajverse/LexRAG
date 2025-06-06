@@ -48,13 +48,6 @@ pip install -r requirement.txt
 uvicorn app.main:app --host 0.0.0.0 --port 7860
 ```
 
-### 6. Run with Docker (Optional)
-Build and run the Docker container:
-```sh
-docker build -t lexrag .
-docker run --env-file .env -p 7860:7860 lexrag
-```
-
 ## Usage
 - Access the app at `http://localhost:7860` after starting the server.
 - Upload or query legal documents as needed.

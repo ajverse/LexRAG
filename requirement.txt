@@ -11,3 +11,8 @@ sentence-transformers
 python-dotenv
 pdfplumber
 google-generativeai
+warnings
+langchain-core
+langchain.text_splitter
+langchain_community.vectorstores
+langchain_huggingface

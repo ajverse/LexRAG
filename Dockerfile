@@ -15,6 +15,6 @@ RUN pip install --upgrade pip && \
 ENV GOOGLE_API_KEY=${GOOGLE_API_KEY}
 ENV HF_DATASET_ID=${HF_DATASET_ID}
 
-EXPOSE 7860
-
+# Hugging Face Spaces compatibility
+ENV PORT=7860
 CMD ["uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "7860"]
